@@ -5,7 +5,6 @@
     <h2>Todo List</h2>
     <a href="javascript:void(0)" class="btn btn-info " id="create-new-product">Add New</a>
     <br><br>
-{{$todo->user->name}}
     <table class="table table-bordered table-striped" id="laravel_datatable">
         <thead>
             <tr>

@@ -12,21 +12,37 @@ class TodoListController extends Controller
 {
     public function index()
     {
-        if (request()->ajax()) {
-            return datatables()->of(TodoList::select('*'))
-                ->addColumn('name', function (TodoList $todo) {
-                    return empty($todo->user->name) ? $todo->user_id : $todo->user->name;
-                })
-                ->editColumn('is_complete', function(TodoList $todo) {
-                    return ($todo->is_complete == 1) ? trans('Complete'): trans('Incomplete');
-                  })
-                ->addColumn('action', 'action')
-                ->rawColumns(['action'])
-                ->addIndexColumn()
-                ->make(true);
+        $user = Auth::getUser();
+        if ($user->isAdmin()) {
+            if (request()->ajax()) {
+                return datatables()->of(TodoList::select('*'))
+                    ->addColumn('name', function (TodoList $todo) {
+                        return empty($todo->user->name) ? $todo->user_id : $todo->user->name;
+                    })
+                    ->editColumn('is_complete', function (TodoList $todo) {
+                        return ($todo->is_complete == 1) ? trans('Complete') : trans('Incomplete');
+                    })
+                    ->addColumn('action', 'action')
+                    ->rawColumns(['action'])
+                    ->addIndexColumn()
+                    ->make(true);
+            }
+        } else {
+            if (request()->ajax()) {
+                return datatables()->of(TodoList::select('*')->where('user_id', $user->id))
+                    ->addColumn('name', function (TodoList $todo) {
+                        return empty($todo->user->name) ? $todo->user_id : $todo->user->name;
+                    })
+                    ->editColumn('is_complete', function (TodoList $todo) {
+                        return ($todo->is_complete == 1) ? trans('Complete') : trans('Incomplete');
+                    })
+                    ->addColumn('action', 'action')
+                    ->rawColumns(['action'])
+                    ->addIndexColumn()
+                    ->make(true);
+            }
         }
-        $todo = TodoList::where('id', 1)->first();
-        return view('todo', compact('todo'));
+        return view('todo');
     }
 
     public function store(Request $request)
