@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
@@ -23,7 +25,18 @@ class HomeController extends Controller
      */
     public function index()
     {
-        
-        return view('home');
+        $user = Auth::getUser();
+        if ($user->isAdmin()) {
+            if (request()->ajax()) {
+                return datatables()->of(User::select('*'))
+                    ->addColumn('action', 'action')
+                    ->rawColumns(['action'])
+                    ->addIndexColumn()
+                    ->make(true);
+            }
+            return view('home');
+        } else {
+            return view('todo');
+        }
     }
 }

@@ -16,10 +16,14 @@ class User extends Authenticatable
      *
      * @var array
      */
+    const STATUS_ADMIN = 'admin';
+    const STATUS_USER = 'user';
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role'
     ];
 
     /**
@@ -40,4 +44,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function isAdmin()
+    {
+        return $this->role === 'admin';
+    }
+
+    public function isUser() {
+        return $this->role === 'user';
+     }
+
+    public function todo()
+    {
+        return $this->hasMany('App\Models\TodoList');
+    }
 }

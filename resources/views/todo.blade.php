@@ -2,18 +2,18 @@
 
 @section('content')
 <div class="container">
-    <h2>User List</h2>
+    <h2>Todo List</h2>
     <a href="javascript:void(0)" class="btn btn-info " id="create-new-product">Add New</a>
     <br><br>
-
+{{$todo->user->name}}
     <table class="table table-bordered table-striped" id="laravel_datatable">
         <thead>
             <tr>
                 <th>ID </th>
                 <th>No. </th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
+                <th>Body</th>
+                <th>Complete</th>
+                <th>User</th>
                 <th>Created at</th>
                 <th>Action</th>
             </tr>
@@ -30,34 +30,9 @@
             <div class="modal-body">
                 <form id="todoForm" name="todoForm" class="form-horizontal">
                     <div class="form-group">
-                        <input type="text" name="user_id" id="user_id" value="" hidden>
-                        <label for="name" class="col-sm-2 control-label">Name</label>
+                        <label for="name" class="col-sm-2 control-label">Body</label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter name" value="" maxlength="50" required="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" class="col-sm-2 control-label">E-mail</label>
-                        <div class="col-sm-12">
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter E-mail" value="" maxlength="50" required="">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="role" class="col-sm-2 control-label">Role</label>
-                        <div class="col-sm-12">
-                            <select class="form-control" name="role" id="role">
-                                <option value="" selected>Please select...</option>
-                                <option value="{{ \App\Models\User::STATUS_ADMIN }}">Admin
-                                </option>
-                                <option value="{{ \App\Models\User::STATUS_USER }}">User
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="password" class="col-sm-2 control-label">Password</label>
-                        <div class="col-sm-12">
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password" value="" maxlength="50" required="">
+                            <input type="text" class="form-control" id="body" name="body" placeholder="Enter Body" value="" maxlength="50" required="">
                         </div>
                     </div>
                     <div class="col-sm-offset-2 col-sm-10">
@@ -73,6 +48,48 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="ajax-product-modal2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="productCrudModal2">Edit Product</h4>
+            </div>
+            <div class="modal-body">
+                <form id="todoForm2" name="todoForm2" class="form-horizontal">
+                    <div class="form-group">
+                        <input type="text" name="todo_id" id="todo_id" value="" hidden>
+                        <label for="body_edit" class="col-sm-2 control-label">Body</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control" id="body_edit" name="body_edit" placeholder="Enter Body" value="" maxlength="50" required="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="complete_edit" class="col-sm-2 control-label">Complete</label>
+                        <div class="col-sm-12">
+                            <select class="form-control" name="complete_edit" id="complete_edit">
+                                <option value="" selected>Please select...</option>
+                                <option value="{{ \App\Models\TodoList::STATUS_INCOMPLETE }}">Incomplete
+                                </option>
+                                <option value="{{ \App\Models\TodoList::STATUS_COMPLETE }}">Complete
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary" id="btn-save2" value="create">Save
+                        </button>
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('script')
@@ -96,7 +113,7 @@
             processing: true,
             serverSide: true,
             ajax: {
-                url: "/",
+                url: "/todo",
                 type: 'GET',
             },
             columns: [{
@@ -111,16 +128,16 @@
                     searchable: false
                 },
                 {
+                    data: 'body',
+                    name: 'body'
+                },
+                {
+                    data: 'is_complete',
+                    name: 'is_complete'
+                },
+                {
                     data: 'name',
                     name: 'name'
-                },
-                {
-                    data: 'email',
-                    name: 'email'
-                },
-                {
-                    data: 'role',
-                    name: 'role'
                 },
                 {
                     data: 'created_at',
@@ -140,24 +157,23 @@
         $('#create-new-product').click(function() {
             $('#btn-save').val("create-product");
             $('#todoForm').trigger("reset");
-            $('#productCrudModal').html("Add New User");
+            $('#productCrudModal').html("Add New Product");
             $('#ajax-product-modal').modal('show');
         });
 
         $('body').on('click', '.edit-product', function() {
             var product_id = $(this).data('id');
             console.log(product_id);
-            $.get('/edit-user/' + product_id, function(data) {
+            $.get('todo-list/' + product_id + '/edit', function(data) {
                 $('#body-error').hide();
                 $('#product_code-error').hide();
                 $('#description-error').hide();
-                $('#productCrudModal').html("Edit Product");
-                $('#btn-save').val("edit-product");
-                $('#ajax-product-modal').modal('show');
-                $('#user_id').val(data.id);
-                $('#name').val(data.name);
-                $('#email').val(data.email);
-                $('#role').val(data.role);
+                $('#btn-save2').val("edit-product");
+                $('#ajax-product-modal2').modal('show');
+                $('#todo_id').val(data.id);
+                $('#user_id').val(data.user_id);
+                $('#body_edit').val(data.body);
+                $('#complete_edit').val(data.is_complete);
             })
         });
 
@@ -168,7 +184,7 @@
             if (confirm("Are You sure want to delete !")) {
                 $.ajax({
                     type: "get",
-                    url: "/delete-user/" + product_id,
+                    url: "/todo-list/delete/" + product_id,
                     success: function(data) {
                         var oTable = $('#laravel_datatable').dataTable();
                         oTable.fnDraw(false);
@@ -192,7 +208,7 @@
 
                 $.ajax({
                     data: $('#todoForm').serialize(),
-                    url: "/add-user",
+                    url: "/todo-list/store",
                     type: "POST",
                     dataType: 'json',
                     success: function(data) {
@@ -207,6 +223,37 @@
                     error: function(data) {
                         console.log('Error:', data);
                         $('#btn-save').html('Save Changes');
+                    }
+                });
+            }
+        })
+    }
+
+    if ($("#todoForm2").length > 0) {
+        $("#todoForm2").validate({
+
+            submitHandler: function(form) {
+
+                var actionType = $('#btn-save2').val();
+                $('#btn-save2').html('Sending..');
+
+                $.ajax({
+                    data: $('#todoForm2').serialize(),
+                    url: "/todo-list/update",
+                    type: "POST",
+                    dataType: 'json',
+                    success: function(data) {
+
+                        $('#todoForm2').trigger("reset");
+                        $('#ajax-product-modal2').modal('hide');
+                        $('#btn-save2').html('Save Changes');
+                        var oTable = $('#laravel_datatable').dataTable();
+                        oTable.fnDraw(false);
+
+                    },
+                    error: function(data) {
+                        console.log('Error:', data);
+                        $('#btn-save2').html('Save Changes');
                     }
                 });
             }
