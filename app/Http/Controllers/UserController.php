@@ -10,9 +10,9 @@ use Illuminate\Support\Facades\Response;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function index(UserRegisterRequest $request)
     {
-        User::updateOrCreate(
+        $user = User::updateOrCreate(
             [
                 'id' => $request->user_id,
             ],
@@ -24,7 +24,7 @@ class UserController extends Controller
             ]
         );
 
-        return back();
+        return $user;
     }
 
     public function deleteUser($id)

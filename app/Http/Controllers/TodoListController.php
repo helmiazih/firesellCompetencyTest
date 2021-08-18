@@ -15,10 +15,7 @@ class TodoListController extends Controller
         $user = Auth::getUser();
         if ($user->isAdmin()) {
             if (request()->ajax()) {
-                return datatables()->of(TodoList::select('*'))
-                    ->addColumn('name', function (TodoList $todo) {
-                        return empty($todo->user->name) ? $todo->user_id : $todo->user->name;
-                    })
+                return datatables()->of(TodoList::select('*')->with('user'))
                     ->editColumn('is_complete', function (TodoList $todo) {
                         return ($todo->is_complete == 1) ? trans('Complete') : trans('Incomplete');
                     })
@@ -29,12 +26,9 @@ class TodoListController extends Controller
             }
         } else {
             if (request()->ajax()) {
-                return datatables()->of(TodoList::select('*')->where('user_id', $user->id))
-                    ->addColumn('name', function (TodoList $todo) {
-                        return empty($todo->user->name) ? $todo->user_id : $todo->user->name;
-                    })
+                return datatables()->of(TodoList::select('*')->where('user_id', $user->id)->with('user'))
                     ->editColumn('is_complete', function (TodoList $todo) {
-                        return ($todo->is_complete == 1) ? trans('Complete') : trans('Incomplete');
+                        return ($todo->is_complete == TodoList::STATUS_COMPLETE) ? trans('Complete') : trans('Incomplete');
                     })
                     ->addColumn('action', 'action')
                     ->rawColumns(['action'])
@@ -59,22 +53,21 @@ class TodoListController extends Controller
 
     public function destroy($id)
     {
-        $product = TodoList::where('id', $id)->delete();
+        TodoList::where('id', $id)->delete();
 
         return back();
     }
 
     public function edit($id)
     {
-        $where = array('id' => $id);
-        $user  = TodoList::where($where)->first();
+        $user  = TodoList::findOrFail($id);
 
-        return Response::json($user);
+        return $user;
     }
 
     public function update(Request $request)
     {
-        TodoList::updateOrCreate(
+        $todo = TodoList::updateOrCreate(
             [
                 'id' => $request->todo_id
             ],
@@ -84,6 +77,6 @@ class TodoListController extends Controller
             ]
         );
 
-        return back();
+        return $todo;
     }
 }
