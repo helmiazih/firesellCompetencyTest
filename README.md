@@ -1,4 +1,4 @@
-*Initial
+*Initial*
 
 1. Run composer install
 2. Run npm install
@@ -9,23 +9,33 @@
 7. Run migration file with seeder, php artisan migrate --seed
 8. Run php artisan passport:install
 
-*Credential
+*Credential*
 
-Admin 
+1. Admin 
+
 email: admin@gmail.com
+
 password: abcd1234
 
-User 
+2. User 
+
 email: user@gmail.com
+
 password: abcd1234
 
-*For API Testing
+*For API*
 
-Login 
+1. Login
+
 POST - {{host}}/api/login
-Body
-email: "admin@gmail.com",
-password: "abcd1234"
 
-Get list of todo
+Body
+{
+    "email": "admin@gmail.com",
+
+    "password": "abcd1234"
+}
+
+2. Get list of todo
+
 GEt - {{host}}/api/todo-list
