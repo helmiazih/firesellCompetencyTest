@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <h2>User List</h2>
-    <a href="javascript:void(0)" class="btn btn-info " id="create-new-product">Add New</a>
+    <a href="javascript:void(0)" class="btn btn-info " id="create-new-user">Add New</a>
     <br><br>
 
     <table class="table table-bordered table-striped" id="laravel_datatable">
@@ -21,11 +21,11 @@
     </table>
 </div>
 
-<div class="modal fade" id="ajax-product-modal" aria-hidden="true">
+<div class="modal fade" id="ajax-user-modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="productCrudModal"></h4>
+                <h4 class="modal-title" id="userCrudModal"></h4>
             </div>
             <div class="modal-body">
                 <form id="todoForm" name="todoForm" class="form-horizontal">
@@ -147,11 +147,11 @@
             ]
         });
 
-        $('#create-new-product').click(function() {
+        $('#create-new-user').click(function() {
             $('#btn-save').val("create-product");
             $('#todoForm').trigger("reset");
-            $('#productCrudModal').html("Add New User");
-            $('#ajax-product-modal').modal('show');
+            $('#userCrudModal').html("Add New User");
+            $('#ajax-user-modal').modal('show');
         });
 
         $('body').on('click', '.edit-product', function() {
@@ -161,9 +161,9 @@
                 $('#body-error').hide();
                 $('#product_code-error').hide();
                 $('#description-error').hide();
-                $('#productCrudModal').html("Edit Product");
+                $('#userCrudModal').html("Edit User");
                 $('#btn-save').val("edit-product");
-                $('#ajax-product-modal').modal('show');
+                $('#ajax-user-modal').modal('show');
                 $('#user_id').val(data.id);
                 $('#name').val(data.name);
                 $('#email').val(data.email);
@@ -207,7 +207,7 @@
                     success: function(data) {
 
                         $('#todoForm').trigger("reset");
-                        $('#ajax-product-modal').modal('hide');
+                        $('#ajax-user-modal').modal('hide');
                         $('#btn-save').html('Save Changes');
                         var oTable = $('#laravel_datatable').dataTable();
                         oTable.fnDraw(false);

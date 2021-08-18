@@ -52,7 +52,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h4 class="modal-title" id="productCrudModal2">Edit Product</h4>
+                <h4 class="modal-title" id="productCrudModal2">Edit Todo</h4>
             </div>
             <div class="modal-body">
                 <form id="todoForm2" name="todoForm2" class="form-horizontal">
@@ -155,7 +155,7 @@
         $('#create-new-product').click(function() {
             $('#btn-save').val("create-product");
             $('#todoForm').trigger("reset");
-            $('#productCrudModal').html("Add New Product");
+            $('#productCrudModal').html("Add New Todo");
             $('#ajax-product-modal').modal('show');
         });
 
