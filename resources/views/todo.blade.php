@@ -31,7 +31,9 @@
                     <div class="form-group">
                         <label for="name" class="col-sm-2 control-label">Body</label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control" id="body" name="body" placeholder="Enter Body" value="" maxlength="50" required="">
+                            <input type="text" class="form-control" id="body" name="body" placeholder="Enter Body" value="" maxlength="50">
+                            <span class="invalid-body text-danger" id="invalid-body" role="alert">
+                            </span>
                         </div>
                     </div>
                     <div class="col-sm-offset-2 col-sm-10">
@@ -60,14 +62,15 @@
                         <input type="text" name="todo_id" id="todo_id" value="" hidden>
                         <label for="body_edit" class="col-sm-2 control-label">Body</label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control" id="body_edit" name="body_edit" placeholder="Enter Body" value="" maxlength="50" required="">
+                            <input type="text" class="form-control" id="body_edit" name="body_edit" placeholder="Enter Body" value="" maxlength="50">
+                            <span class="invalid-body-edit text-danger" id="invalid-body-edit" role="alert">
+                            </span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="complete_edit" class="col-sm-2 control-label">Complete</label>
                         <div class="col-sm-12">
                             <select class="form-control" name="complete_edit" id="complete_edit">
-                                <option value="" selected>Please select...</option>
                                 <option value="{{ \App\Models\TodoList::STATUS_INCOMPLETE }}">Incomplete
                                 </option>
                                 <option value="{{ \App\Models\TodoList::STATUS_COMPLETE }}">Complete
@@ -219,8 +222,16 @@
 
                     },
                     error: function(data) {
-                        console.log('Error:', data);
-                        $('#btn-save').html('Save Changes');
+                        if (data.status === 422) {
+                            var errors = $.parseJSON(data.responseText);
+                            $.each(errors, function(key, value) {
+                                if ($.isPlainObject(value)) {
+                                    $.each(value, function(key, value) {
+                                        $('#invalid-' + key).html(value)
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -250,8 +261,16 @@
 
                     },
                     error: function(data) {
-                        console.log('Error:', data);
-                        $('#btn-save2').html('Save Changes');
+                        if (data.status === 422) {
+                            var errors = $.parseJSON(data.responseText);
+                            $.each(errors, function(key, value) {
+                                if ($.isPlainObject(value)) {
+                                    $.each(value, function(key, value) {
+                                        $('#invalid-' + key + '-edit').html(value)
+                                    });
+                                }
+                            });
+                        }
                     }
                 });
             }

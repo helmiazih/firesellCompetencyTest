@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TodoListRequest;
 use App\Models\TodoList;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -39,16 +40,16 @@ class TodoListController extends Controller
         return view('todo');
     }
 
-    public function store(Request $request)
+    public function store(TodoListRequest $request)
     {
         $user = Auth::getUser();
-        TodoList::create([
+        $todo = TodoList::create([
             'body' => $request->body,
             'is_complete' => 0,
             'user_id' => $user->id,
         ]);
 
-        return back();
+        return Response::json($todo);
     }
 
     public function destroy($id)
@@ -65,7 +66,7 @@ class TodoListController extends Controller
         return $user;
     }
 
-    public function update(Request $request)
+    public function update(TodoListRequest $request)
     {
         $todo = TodoList::updateOrCreate(
             [
