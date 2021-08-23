@@ -18,4 +18,4 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('todo-list', [ UserController::class,'todoList']);
 });
 
-Route::post('login',  [UserController::class, 'login']);
+Route::post('login',  [UserController::class, 'login'])->name('loginVue');

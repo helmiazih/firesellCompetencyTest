@@ -70,14 +70,14 @@ class TodoListController extends Controller
     {
         $todo = TodoList::updateOrCreate(
             [
-                'id' => $request->todo_id
+                'id' => $request->id
             ],
             [
-                'body' => $request->body_edit,
-                'is_complete' => $request->complete_edit,
+                'body' => $request->body,
+                'is_complete' => $request->is_complete,
             ]
         );
 
-        return $todo;
+        return Response::json($todo);
     }
 }

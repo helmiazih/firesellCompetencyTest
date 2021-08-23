@@ -18,7 +18,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/admin.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -59,7 +59,7 @@
                                 {{ Auth::user()->name }}
                             </a>
 
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <div style="z-index:99999" class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
                                     {{ __('Logout') }}
@@ -75,15 +75,10 @@
                 </div>
             </div>
         </nav>
-        @auth()
-        @include('components.menu')
-        @endauth
-        <main class="py-4">
+        <main class="">
             @yield('content')
         </main>
     </div>
-    <script src="{{ mix('js/app.js') }}" defer></script>
     @yield('script')
 </body>
-
 </html>

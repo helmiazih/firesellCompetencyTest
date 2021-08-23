@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UserRegisterRequest extends FormRequest
@@ -24,9 +25,10 @@ class UserRegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|email|max:255',
+            'email' => ['required', 'string', 'email', 'max:255',
+            Rule::unique('users')],
             'role' => 'required',
-            'name' => 'required|string|max:255',
+            'name' => 'bail|required|string|max:255',
             'password' => 'required|string|min:8',
         ];
     }

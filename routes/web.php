@@ -27,18 +27,25 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+
     //User 
     Route::post('/add-user', [UserController::class, 'index'])->name('addUser');
     Route::get('/delete-user/{id}', [UserController::class, 'deleteUser'])->name('deleteUser');
-    Route::get('/edit-user/{id}',[UserController::class, 'edit']);
+    Route::get('/edit-user/{id}', [UserController::class, 'edit']);
+
+    Route::post('/update-user', [UserController::class, 'update']);
+
+    Route::get('/user-role', function () {
+        $user = Auth::getUser();
+        return $user;
+    });
 
     //Todo-List
     Route::get('/todo', [TodoListController::class, 'index'])->name('todoList');
-    Route::get('/todo-list/{id}/edit',[TodoListController::class, 'edit']);
+    Route::get('/todo-list/{id}/edit', [TodoListController::class, 'edit']);
     Route::post('/todo-list/update', [TodoListController::class, 'update']);
     Route::post('/todo-list/store', [TodoListController::class, 'store']);
-    Route::get('/todo-list/delete/{id}',[TodoListController::class, 'destroy']);
-
+    Route::get('/todo-list/delete/{id}', [TodoListController::class, 'destroy']);
 });
 
-
+Route::get('{path}', [App\Http\Controllers\HomeController::class, 'index'])->where('path', '^[A-Za-z/\0-9_.]+$');

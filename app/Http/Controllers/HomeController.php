@@ -34,9 +34,10 @@ class HomeController extends Controller
                     ->addIndexColumn()
                     ->make(true);
             }
-            return view('home');
+            return view('vue');
         } else {
-            return view('todo');
+            return view('vue');
         }
     }
+
 }
