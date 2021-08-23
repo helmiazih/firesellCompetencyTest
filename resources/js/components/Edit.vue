@@ -42,7 +42,7 @@
                 <has-error :form="form" field="email"></has-error>
               </div>
               <div class="form-group">
-                <select
+                <select disabled
                   name="role"
                   v-model="form.role"
                   class="form-control"
