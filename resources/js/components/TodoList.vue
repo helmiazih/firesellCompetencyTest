@@ -92,7 +92,7 @@ export default {
       });
     });
 
-    $("body").on("click", ".edit-product", function () {
+    $("body").on("click", ".edit-todo", function () {
       var todo_id = $(this).data("id");
       $.get('todo-list/' + todo_id + '/edit', function (data) {
         $("#editTodo").modal("show");
@@ -100,7 +100,7 @@ export default {
       });
     });
 
-    $("body").on("click", "#delete-product", function () {
+    $("body").on("click", "#delete-todo", function () {
       var todo_id = $(this).data("id");
 
       if (confirm("Are You sure want to delete !")) {

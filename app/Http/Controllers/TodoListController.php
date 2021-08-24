@@ -20,7 +20,7 @@ class TodoListController extends Controller
                     ->editColumn('is_complete', function (TodoList $todo) {
                         return ($todo->is_complete == 1) ? trans('Complete') : trans('Incomplete');
                     })
-                    ->addColumn('action', 'action')
+                    ->addColumn('action', 'todo_action')
                     ->rawColumns(['action'])
                     ->addIndexColumn()
                     ->make(true);
@@ -31,7 +31,7 @@ class TodoListController extends Controller
                     ->editColumn('is_complete', function (TodoList $todo) {
                         return ($todo->is_complete == TodoList::STATUS_COMPLETE) ? trans('Complete') : trans('Incomplete');
                     })
-                    ->addColumn('action', 'action')
+                    ->addColumn('action', 'todo_action')
                     ->rawColumns(['action'])
                     ->addIndexColumn()
                     ->make(true);
