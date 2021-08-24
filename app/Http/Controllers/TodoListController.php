@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EditTodoRequest;
 use App\Http\Requests\TodoListRequest;
 use App\Models\TodoList;
 use App\Models\User;
@@ -66,7 +67,7 @@ class TodoListController extends Controller
         return $user;
     }
 
-    public function update(TodoListRequest $request)
+    public function update(EditTodoRequest $request)
     {
         $todo = TodoList::updateOrCreate(
             [
